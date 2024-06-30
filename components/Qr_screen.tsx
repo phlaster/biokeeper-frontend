@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Dimensions, Alert, Vibration,Button } from "react-native";
+import { Dimensions, Alert, Vibration,Button, Pressable,Text } from "react-native";
 import { Camera,CameraView } from 'expo-camera';
 import { router } from "expo-router";
 import * as Linking from "expo-linking";
@@ -69,7 +69,9 @@ function QRScanner({ navigation }) {
 
 
     return (
-      <><Button title="Сохранить" onPress={handleBarCodeScannedTest} />
+      <><Pressable  onPress={handleBarCodeScannedTest} >
+       <Text>I'm pressable!</Text>
+       </Pressable>
       <CameraView
         onBarcodeScanned={handleBarCodeScanned}
         barcodeScannerSettings={{
