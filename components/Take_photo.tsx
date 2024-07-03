@@ -33,6 +33,10 @@ export default function Take_photo({ navigation }) {
   }, []);
 
 
+  const loadscene_photo = async () => {
+    navigation.navigate('Make_photo');
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -53,6 +57,7 @@ export default function Take_photo({ navigation }) {
         <Text>Сделайте хорошее фото, и загрузите его из галереи.</Text>
       </View>
 
+      <Button title={'photo'} onPress={loadscene_photo} />
       <Button title={'Gallery'} onPress={pickImage} />
       {imageUri && <Image source={{ uri: imageUri }} style={{ flex: 1 }} />}
     </View>

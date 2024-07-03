@@ -64,6 +64,11 @@ export default function Authorization({ navigation }) {
     }
   };
 
+  const loadSceneTest = async () => {
+    navigation.navigate('Bio_info', { data: '123'});
+  };
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.textLast}>Авторизация</Text>
@@ -80,7 +85,7 @@ export default function Authorization({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}  // Скрытие пароля
       />
-      <Button style={styles.btn} title={'Продолжить'} onPress={loadScene} />
+      <Button style={styles.btn} title={'Продолжить'} onPress={loadSceneTest} />
       <StatusBar style="auto" />
     </View>
   );
