@@ -2,27 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 
+import axios from 'axios';
+
 import getData from './getData';
 import storeData from './storeData';
 
-const Request = async (method, url, data) => {
-    try {
-      const response = await fetch(url + "?" + new URLSearchParams(data).toString(), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-  
-      const resp = await response.json();
-  
-      return resp;
-    } catch (error) {
-      console.error('There has been a problem with your fetch operation:', error);
-      throw error;
-    }
+const login = async (user, pass) => {
+  try {
+    const response = await axios.post('http://62.109.17.249:1337/token', new URLSearchParams({
+      grant_type: 'password',
+      username: user,
+      password: pass,
+    }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    storeData("access_token", response.data.access_token);
+    storeData("refresh_token", response.data.refresh_token);
+
+  } catch (error) {
+    console.error('Error logging in:', error);
   }
+};
+
 
 export default function Authorization({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
@@ -44,29 +48,19 @@ export default function Authorization({ navigation }) {
     fetchData();
   }, []);
 
+
+  //работает только если юзер гарантированно есть в дб
   const loadScene = async () => {
     try {
-      const data = await Request('POST', 'http://62.109.17.249:8000/react/login', {
-        username: inputLogin,
-        password: inputPassword
-      });
-      console.log(data);
+      await login(inputLogin, inputPassword);
 
-      if (data.result) {
-        await storeData('username', inputLogin);
-        await storeData('password', inputPassword);
-        navigation.navigate('LK');
-      } else {
-        Alert.alert(data.response);
-      }
+      console.log(await getData("access_token"));
+      console.log(await getData("refresh_token"));
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  const loadSceneTest = async () => {
-    navigation.navigate('Bio_info', { data: '123'});
-  };
 
 
   return (
@@ -85,7 +79,7 @@ export default function Authorization({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}  // Скрытие пароля
       />
-      <Button style={styles.btn} title={'Продолжить'} onPress={loadSceneTest} />
+      <Button style={styles.btn} title={'Продолжить'} onPress={loadScene} />
       <StatusBar style="auto" />
     </View>
   );
