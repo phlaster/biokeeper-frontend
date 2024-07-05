@@ -28,9 +28,11 @@ const login = async (user, pass) => {
 };
 
 
-export default function Authorization({ navigation }) {
+export default function Registration({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
+  const [inputEmail, setEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
+  const [inputPassword2, setInputPassword2] = useState('');
   const [storedLogin, setStoredLogin] = useState('');
   const [storedPassword, setStoredPassword] = useState('');
 
@@ -60,14 +62,12 @@ export default function Authorization({ navigation }) {
       console.error('Error:', error);
     }
   };
-  const registration = async () => {
-    navigation.navigate('Registration')
-  };
+  
 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textLast}>Вход</Text>
+      <Text style={styles.textLast}>Регистрация</Text>
       <TextInput
         style={styles.input}
         onChangeText={setInputLogin}
@@ -76,13 +76,25 @@ export default function Authorization({ navigation }) {
       />
       <TextInput
         style={styles.input}
+        onChangeText={setEmail}
+        value={inputEmail}
+        placeholder="Email"
+      />
+      <TextInput
+        style={styles.input}
         onChangeText={setInputPassword}
         value={inputPassword}
         placeholder="Password"
         secureTextEntry={true}  // Скрытие пароля
       />
+      <TextInput
+        style={styles.input}
+        onChangeText={setInputPassword2}
+        value={inputPassword2}
+        placeholder="Repeat the password"
+        secureTextEntry={true}  // Скрытие пароля
+      />
       <Button style={styles.btn} title={'Продолжить'} onPress={loadScene} />
-      <Button style={styles.btn} title={'у меня нет аккаунта'} onPress={registration} />
       <StatusBar style="auto" />
     </View>
   );

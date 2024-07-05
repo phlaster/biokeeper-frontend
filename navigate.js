@@ -6,6 +6,7 @@ import Take_photo from './components/Take_photo';
 import Autorization from './components/Autorization';
 import ResearchComment from './components/ResearchComment';
 import Make_photo from "./components/Make_photo";
+import Registration from "./components/Registarion";
 import LK from './components/LK';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -54,6 +55,11 @@ export default function Navigate(){
                 name="Make_photo"
                 component={Make_photo}
                 options={{title:'Make_photo'}}
+                />
+                <Stack.Screen
+                name="Registration"
+                component={Registration}
+                options={{title:'Registration'}}
                 />
         
         </Stack.Navigator>
