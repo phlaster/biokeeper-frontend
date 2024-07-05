@@ -20,5 +20,5 @@ ResearchComment.jsx    | information about the research
 QR_screen.tsx          | window for scanning the QR code of the research
 Bio_info.jsx           | a window where information is read, such as    geolocation, date and time of the research, and a request is sent to the server, you can also take a photo of the sample from this window
 Take_photo.tsx         | the window from which the sample photo is taken
-
-j.
+Registration.js        | this window is used to "create" new user and save it to database
+Authfunc.js            | a handmade module to simply make axios requests with different endpoints the same way

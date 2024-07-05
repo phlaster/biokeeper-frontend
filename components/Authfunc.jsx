@@ -9,11 +9,15 @@ export default async function auth (endpoint, params) {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-  
-      storeData("access_token", response.data.access_token);
-      storeData("refresh_token", response.data.refresh_token);
+      
+    if (endpoint == 'token') {
+        storeData("access_token", response.data.access_token);
+        storeData("refresh_token", response.data.refresh_token);
+        storeData("authStatus", response.status);
+    }
   
     } catch (error) {
+      storeData("authStatus", error.response.status);
       console.error('Error logging in:', error);
     }
   };

@@ -12,8 +12,6 @@ export default function Registration({ navigation }) {
   const [inputEmail, setEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
-  const [storedLogin, setStoredLogin] = useState('');
-  const [storedPassword, setStoredPassword] = useState('');
 
 
   const loadScene = async () => {

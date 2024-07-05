@@ -12,11 +12,7 @@ export default function Authorization({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const login = await getData('username');
-      const password = await getData('password');
-      if (login && password) {
-        setStoredLogin(login);
-        setStoredPassword(password);
+      if (await getData('access_token')) {
         navigation.navigate('LK');
       }
     };
@@ -31,18 +27,23 @@ export default function Authorization({ navigation }) {
       await auth('token', {
         grant_type: 'password',
         username: inputLogin,
-        password: inputLogin,
+        password: inputPassword
       });
 
-      storeData('username', inputLogin);
-      storeData('parrword', inputPassword);
-
-      console.log(await getData("access_token"));
-      console.log(await getData("refresh_token"));
+      console.log(await getData("authStatus") == "401");
+      if (await getData("authStatus") == "401") {
+        alert("Неправильный логин или пароль!");
+      } else {
+        console.log(await getData("access_token"));
+        console.log(await getData("refresh_token"));
+        navigation.navigate('LK');
+      }
+      
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
   const registration = async () => {
     navigation.navigate('Registration')
   };
