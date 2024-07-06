@@ -10,6 +10,7 @@ npm start
 ```
 
 # components
+<img src="readme_assets/screens_diagram.svg" width=70% height=400>
 
 filename   | description of file
 ----------------------|----------------------
@@ -22,3 +23,4 @@ Bio_info.jsx           | a window where information is read, such as    geolocat
 Take_photo.tsx         | the window from which the sample photo is taken
 Registration.js        | this window is used to "create" new user and save it to database
 Authfunc.js            | a handmade module to simply make axios requests with different endpoints the same way
+
