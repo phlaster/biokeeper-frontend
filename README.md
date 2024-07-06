@@ -10,7 +10,7 @@ npm start
 ```
 
 # components
-<img src="readme_assets/screens_diagram.svg" width=70% height=400>
+<img src="readme_assets/screens_diagram.svg" width=100% height=500>
 
 filename   | description of file
 ----------------------|----------------------
