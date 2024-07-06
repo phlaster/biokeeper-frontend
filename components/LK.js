@@ -39,12 +39,9 @@ export default function LK({ navigation }) {
   }
 
   const exit = async () => {
-    let username = 'username',
-      password = 'password';
-
     try {
-      await AsyncStorage.removeItem(username);
-      await AsyncStorage.removeItem(password);
+      await AsyncStorage.removeItem('access_token');
+      await AsyncStorage.removeItem('refresh_token');
       navigation.navigate('Autorization');
     } catch (e) {
       console.error("Ошибка при удалении данных", e);
@@ -70,19 +67,10 @@ export default function LK({ navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const login = await getData('username');
-      const password = await getData('password');
-      if (login && password) {
+      const access_token = await getData('access_token');
+      if (access_token) {
         try {
-          const data = await Request('POST', 'http://62.109.17.249:8000/react/researches', { username: login, password: password });
-          console.log(data);
-          if (!data.result) {
-            Alert.alert("Ошибка:\n" + data.response);
-          } else {
-            setComments(Array.from(Object.values(data.response), r => r.comment));
-            console.log("Comments after request:\n" + Comments);
-            setOptions(Array.from(Object.values(data.response), r => r.name));
-          }
+          //делаем запрос на ресёрчи
         } catch (error) {
           console.error('Error:', error);
         }
@@ -109,7 +97,7 @@ export default function LK({ navigation }) {
 
       { SelectedOption == '' ? '' : <Button style={styles.btn} title={'Выбрать и продолжить'} onPress={loadscene} /> }
 
-      <Button style={styles.btn} title={'выйти'} onPress={exit} />
+      <Button style={styles.btn} title={'выйти из аккаунта'} onPress={exit} />
       <StatusBar style="auto" />
     </View>
   );

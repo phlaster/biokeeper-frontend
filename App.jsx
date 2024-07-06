@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text ,Image} from 'react-native';
 import * as Location from 'expo-location';
 import MainStack from './navigate';
-
+import { Camera} from 'expo-camera/legacy'; // Импортируем CameraType
 
 const App = () => {
 
@@ -27,10 +27,8 @@ const App = () => {
   useEffect(() => {
     const requestPermissions = async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      const audioPermission = await Camera.requestMicrophonePermissionsAsync();
 
       setCameraPermission(cameraPermission.status === "granted");
-      setAudioPermission(audioPermission.status === "granted");
     };
 
     requestPermissions();
@@ -55,6 +53,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logo: {
+    width: 350,
+    height: 240,
   },
 });
 

@@ -70,7 +70,7 @@ function QRScanner({ navigation }) {
 
     return (
       <><Pressable  onPress={handleBarCodeScannedTest} >
-       <Text>I'm pressable!</Text>
+       <Text>Start!</Text>
        </Pressable>
       <CameraView
         onBarcodeScanned={handleBarCodeScanned}
