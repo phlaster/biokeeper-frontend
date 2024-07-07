@@ -1,8 +1,7 @@
 import axios from 'axios';
 import storeData from './storeData';
 
-
-export async function auth (params) {
+export async function auth(params) {
   try {
     const response = await axios.post('http://62.109.17.249:1337/token', new URLSearchParams(params), {
       headers: {
@@ -12,15 +11,16 @@ export async function auth (params) {
 
     storeData("access_token", response.data.access_token);
     storeData("refresh_token", response.data.refresh_token);
-    storeData("authStatus", response.status);
+    return response.status; // Return the status for further handling
 
   } catch (error) {
-    storeData("authStatus", error.response.status);
     console.error('Error logging in:', error);
-  }
-};
 
-export async function reg (params) {
+    throw error; // Rethrow the error for the caller to handle
+  }
+}
+
+export async function reg(params) {
   try {
     const response = await axios.post('http://62.109.17.249:1337/create', params, {
       headers: {
@@ -28,7 +28,8 @@ export async function reg (params) {
       }
     });
   } catch (error) {
-    storeData("authStatus", error.response.status);
-    console.error('Error logging in:', error);
+    storeData("authStatus", error.response ? error.response.status : 500);
+    console.error('Error registering:', error);
+    throw error; // Rethrow the error for the caller to handle
   }
-};
+}

@@ -40,8 +40,9 @@ export default function Bio_info({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [storedGeoData, setStoredGeoData] = useState('');
   const handleSave = () => {
-    
-    storeData('GeoData', JSON.stringify(location));
+    Alert.alert('Данные сохраненны')
+    navigation.navigate('LK')
+    //storeData('GeoData', JSON.stringify(location));
     
   };
   useEffect(() => {
@@ -104,7 +105,6 @@ export default function Bio_info({ route, navigation }) {
       <Button title={'Фото'} onPress={loadscene} />
       
       <Button title="Сохранить данные" onPress={handleSave} />
-      <Button title="Отправить данные" onPress={sendData} />
       
       <StatusBar style="auto" />
     </View>
