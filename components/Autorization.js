@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 
 import getData from './getData';
-import auth from './Authfunc';
+import { auth } from './Authfunc';
 
 
 export default function Authorization({ navigation }) {
@@ -24,7 +24,7 @@ export default function Authorization({ navigation }) {
 
   const loadScene = async () => {
     try {
-      await auth('token', {
+      await auth({
         grant_type: 'password',
         username: inputLogin,
         password: inputPassword

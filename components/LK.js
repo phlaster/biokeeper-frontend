@@ -42,6 +42,7 @@ export default function LK({ navigation }) {
     try {
       await AsyncStorage.removeItem('access_token');
       await AsyncStorage.removeItem('refresh_token');
+      
       navigation.navigate('Autorization');
     } catch (e) {
       console.error("Ошибка при удалении данных", e);
