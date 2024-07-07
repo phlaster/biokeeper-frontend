@@ -22,3 +22,4 @@ After_Scan.jsx           | a window where information is read, such as    geoloc
 Take_photo.tsx         | the window from which the sample photo is taken
 Registration.js        | this window is used to "create" new user and save it to database
 Authfunc.js            | a handmade module to simply make axios requests with different endpoints the same way
+MyScans.js             | a table is created in which all saved scans are loaded from the storage

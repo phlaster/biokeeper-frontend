@@ -21,6 +21,7 @@ export default function After_Scan({ route, navigation }) {
 
   useEffect(() => {
     const getLocation = async () => {
+      
       const permissionGranted = await getLocationPermission();
       if (permissionGranted) {
         const currentLocation = await Location.getCurrentPositionAsync({});
@@ -46,8 +47,8 @@ export default function After_Scan({ route, navigation }) {
       latitude: location ? location.latitude : null,
       longitude: location ? location.longitude : null,
     };
-
-    await storeData(`scan_${scanId}`, JSON.stringify(scanData));
+    const username = await getData('login'); // Retrieve username from local storage
+    await storeData(`scan_${username}_${scanId}`, JSON.stringify(scanData));
     Alert.alert('Данные сохранены');
     navigation.navigate('LK');
   };
