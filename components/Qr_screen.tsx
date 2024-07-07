@@ -51,11 +51,11 @@ function QRScanner({ navigation }) {
 
   const handleBarCodeScanned = async ({ data }) => {
     Vibration.vibrate();
-    navigation.navigate('Bio_info', { data: data });
+    navigation.navigate('After_Scan', { data: data });
   };
   const handleBarCodeScannedTest = async () => {
     
-    navigation.navigate('Bio_info', { data: '123'});
+    navigation.navigate('After_Scan', { data: '123'});
   };
 
   const goToSettings = () => {

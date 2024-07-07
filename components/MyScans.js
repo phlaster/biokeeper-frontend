@@ -3,16 +3,13 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 
-export default function Myscans({navigation}) {
-const loadscene=()=>{
-  navigation.navigate('Autorization');
-}
+export default function MyScans({navigation}) {
+
 
   return (
     <View style={styles.container}>
       
-      
-       <Button title={'Начать'} onPress={loadscene}/>
+      <Text>Здесь будут ваши сканы</Text>
       <StatusBar style="auto" />
     </View>
   );

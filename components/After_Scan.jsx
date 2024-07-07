@@ -36,7 +36,7 @@ const getLocationPermission = async () => {
 };
 
 
-export default function Bio_info({ route, navigation }) {
+export default function After_Scan({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [storedGeoData, setStoredGeoData] = useState('');
   const handleSave = () => {
