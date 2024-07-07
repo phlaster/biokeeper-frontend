@@ -39,7 +39,7 @@ export default function Authorization({ navigation }) {
       if (authStatus === 401) {
         Alert.alert('Error', 'Неправильный логин или пароль!');
       } else {
-        
+        await storeData("login", inputLogin);
         console.log(await getData("access_token"));
         console.log(await getData("refresh_token"));
         navigation.navigate('LK');

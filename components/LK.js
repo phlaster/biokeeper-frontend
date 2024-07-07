@@ -6,13 +6,14 @@ import storeData from './storeData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LK({ navigation }) {
-  const [userData, setUserData] = useState({ name: 'John Doe', email: 'john.doe@example.com' });
+  const [userData, setUserData] = useState({ name: '', email: '' });
   const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
 
   const exit = async () => {
     try {
       await AsyncStorage.removeItem('access_token');
       await AsyncStorage.removeItem('refresh_token');
+      await AsyncStorage.removeItem('username'); // Remove username from local storage
       navigation.navigate('Autorization');
     } catch (e) {
       console.error("Ошибка при удалении данных", e);
@@ -22,22 +23,28 @@ export default function LK({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       const access_token = await getData('access_token');
+      const username = await getData('login'); // Retrieve username from local storage
       if (!access_token) {
         Alert.alert("Invalid Login or Password");
+      } else {
+        setUserData({ ...userData, name: username }); // Set username in state
       }
     };
 
     fetchData();
   }, []);
 
-  const Scan=()=>{
+  const Scan = () => {
     navigation.navigate('Qr_screen');
-  }
+  };
+  const MyScan = () => {
+    navigation.navigate('MyScans');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Image style={styles.userpic} source={require('../assets/LK.png')}/>
+        <Image style={styles.userpic} source={require('../assets/LK.png')} />
         <View style={styles.userInfo}>
           <Text>{userData.name}</Text>
           <Text>{userData.email}</Text>
@@ -51,7 +58,7 @@ export default function LK({ navigation }) {
             <Button title="Scan" onPress={Scan} />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="My Scans" onPress={() => {}} />
+            <Button title="My Scans" onPress={MyScan} />
           </View>
         </View>
         <View style={styles.buttonRow}>

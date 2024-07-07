@@ -31,7 +31,7 @@ export default function Registration({ navigation }) {
           username: inputLogin,
           password: inputPassword
         });
-
+        await storeData("login", inputLogin);
         console.log(await getData("access_token"));
         console.log(await getData("refresh_token"));
 
