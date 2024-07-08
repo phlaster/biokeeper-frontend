@@ -75,7 +75,7 @@ export default function Authorization({ navigation }) {
           style={styles.button}
           loading={loading}
           onPress={handleLogin}
-          disabled={loading}
+          disabled={loading || !inputLogin || !inputPassword}
         >
           {loading ? 'Logging in...' : 'Log in'}
         </Button>

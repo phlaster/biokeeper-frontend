@@ -22,19 +22,22 @@ export default StyleSheet.create({
         padding: 16,
     },
     authSurface: {
-        padding: 30,
+        padding: 20,
         borderRadius: 10,
         elevation: 4,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 16,
         textAlign: 'center',
         color: theme.colors.primary,
     },
     input: {
+      fontSize: 18,
         marginBottom: 16,
+        width: 200
+        
     },
     button: {
         marginTop: 8,

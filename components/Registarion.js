@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { TextInput, Button, Text, Surface } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-
 import styles from '../styles/style';
 import getData from './getData';
 import { reg, auth } from './Authfunc';
 import storeData from './storeData';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Registration({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
@@ -16,11 +17,6 @@ export default function Registration({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const handleRegistration = async () => {
-    if (inputPassword !== inputPassword2) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-
     setLoading(true);
     try {
       await reg({
@@ -31,8 +27,8 @@ export default function Registration({ navigation }) {
       });
 
       const authStatus = await getData("authStatus");
-      if (authStatus === "400") {
-        Alert.alert("Error", "A user with this email is already registered!");
+      if (authStatus && authStatus.error) {
+        Alert.alert("Error", authStatus.error);
       } else {
         await auth({
           grant_type: 'password',
@@ -44,11 +40,55 @@ export default function Registration({ navigation }) {
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', `An error occurred during registration.\n${error}`);
+      Alert.alert('Error', `An error occurred during registration.\n${error.message}`);
     } finally {
       setLoading(false);
     }
   };
+
+  const passwordsMatch = inputPassword === inputPassword2;
+  const emailIsValid = EMAIL_REGEX.test(inputEmail);
+
+  const passwordLengthGE = inputPassword.length >= 8;
+  const passwordLengthLE = inputPassword.length <= 20;
+  const hasLowercase = /[a-z]/.test(inputPassword);
+  const hasUppercase = /[A-Z]/.test(inputPassword);
+  const hasNumber = /\d/.test(inputPassword);
+  const hasSpecialChar = /\W|_/g.test(inputPassword);
+
+  let passwordWeaknessMessage = '';
+  if (!passwordLengthGE) {
+    passwordWeaknessMessage = 'Password is too short';
+  } else if (!passwordLengthLE) {
+    passwordWeaknessMessage = 'Password is too long';
+  } else if (!hasLowercase) {
+    passwordWeaknessMessage = 'Need lowercase letters';
+  } else if (!hasUppercase) {
+    passwordWeaknessMessage = 'Need uppercase letters';
+  } else if (!hasNumber) {
+    passwordWeaknessMessage = 'Need a number';
+  } else if (!hasSpecialChar) {
+    passwordWeaknessMessage = 'Need a special character';
+  }
+
+  let buttonLabel = 'Enter your credentials';
+  if (inputLogin) {
+    if (!inputEmail) {
+      buttonLabel = 'Enter your email';
+    } else if (!emailIsValid) {
+      buttonLabel = 'Enter valid email';
+    } else if (!inputPassword) {
+      buttonLabel = 'Enter your password';
+    } else if (passwordWeaknessMessage) {
+      buttonLabel = passwordWeaknessMessage;
+    } else if (!passwordsMatch) {
+      buttonLabel = 'Passwords don\'t match';
+    } else {
+      buttonLabel = 'Register';
+    }
+  }
+
+  const isButtonDisabled = loading || !inputLogin || !inputEmail || !emailIsValid || !inputPassword || passwordWeaknessMessage || !passwordsMatch;
 
   return (
     <View style={styles.container}>
@@ -85,15 +125,16 @@ export default function Registration({ navigation }) {
           value={inputPassword2}
           onChangeText={setInputPassword2}
           secureTextEntry
+          editable={!passwordWeaknessMessage}
         />
         <Button
           mode="contained"
           style={styles.button}
           onPress={handleRegistration}
           loading={loading}
-          disabled={loading}
+          disabled={isButtonDisabled}
         >
-          {loading ? 'Registering...' : 'Register'}
+          {buttonLabel}
         </Button>
         <Button
           mode="text"
