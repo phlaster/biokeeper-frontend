@@ -2,9 +2,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Image, ScrollView, BackHandler, Alert } from 'react-native';
-import { Text, Button, Surface, Avatar, useTheme } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
+import { View, ScrollView, BackHandler, Alert } from 'react-native';
+import { Text, Button, Surface, Avatar } from 'react-native-paper';
+
 
 import styles from '../styles/style';
 import getData from './getData';
@@ -14,7 +14,6 @@ export default function LK({ navigation }) {
   const [userData, setUserData] = useState({ name: '', email: 'some@email.com' });
   const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
   const [isOffline, setIsOffline] = useState(false);
-  const theme = useTheme();
 
   useFocusEffect(
     useCallback(() => {

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Dimensions, Alert, Vibration, Button, Pressable, Text, View, Image } from "react-native";
-import { Camera, CameraType } from 'expo-camera/legacy'; // Импортируем CameraType
-import * as MediaLibrary from 'expo-media-library'; // Импортируем MediaLibrary
+import { Camera, CameraType } from 'expo-camera/legacy';
+import * as MediaLibrary from 'expo-media-library';
 import { router } from "expo-router";
 import * as Linking from "expo-linking";
 
 function Make_photo({ navigation }) {
   const [hasCameraPermission, setCameraPermission] = useState<boolean | null>(null);
   const [hasAudioPermission, setAudioPermission] = useState<boolean | null>(null);
-  const [hasMediaLibraryPermission, setMediaLibraryPermission] = useState<boolean | null>(null); // Добавлено состояние для разрешения на медиа библиотеку
+  const [hasMediaLibraryPermission, setMediaLibraryPermission] = useState<boolean | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const cameraRef = useRef<Camera>(null);
@@ -17,11 +17,11 @@ function Make_photo({ navigation }) {
     const requestPermissions = async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const audioPermission = await Camera.requestMicrophonePermissionsAsync();
-      const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(); // Запрашиваем разрешение на доступ к медиа библиотеке
+      const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync(); 
 
       setCameraPermission(cameraPermission.status === "granted");
       setAudioPermission(audioPermission.status === "granted");
-      setMediaLibraryPermission(mediaLibraryPermission.status === "granted"); // Устанавливаем состояние для разрешения на медиа библиотеку
+      setMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     };
 
     requestPermissions();
@@ -88,7 +88,7 @@ function Make_photo({ navigation }) {
           <View style={{ flex: 1 }}>
             <Image source={{ uri: capturedImage.uri }} style={{ flex: 1 }} />
             <Button title="Retake" onPress={__retakePicture} />
-            <Button title="Save" onPress={__savePhoto} />{/* Добавлена кнопка для сохранения фотографии */}
+            <Button title="Save" onPress={__savePhoto} />{}
           </View>
         ) : (
           <>
