@@ -23,6 +23,14 @@ export default function LK({ navigation }) {
     }, [navigation])
   );
 
+  // React.useEffect(
+  //   () =>
+  //     navigation.addListener("beforeRemove", (event) => {
+  //       event.preventDefault();
+  //     }),
+  //   [navigation]
+  // );
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -65,7 +73,6 @@ export default function LK({ navigation }) {
           </Button>
         </View>
 
-
         <View style={styles.buttonGrid}>
           <Button mode="contained" onPress={() => navigateTo('Qr_screen')} style={styles.gridButton}>
             Scan
@@ -73,10 +80,10 @@ export default function LK({ navigation }) {
           <Button mode="contained" onPress={() => navigateTo('MyScans')} style={styles.gridButton}>
             My Scans
           </Button>
-          <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+          <Button mode="contained" onPress={() => { }} style={styles.gridButton}>
             Activate KIT
           </Button>
-          <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+          <Button mode="contained" onPress={() => { }} style={styles.gridButton}>
             My Kits
           </Button>
         </View>
