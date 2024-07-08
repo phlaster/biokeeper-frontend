@@ -51,7 +51,7 @@ export default function Registration({ navigation }) {
   const emailIsValid = EMAIL_REGEX.test(inputEmail);
 
   const passwordLengthGE = inputPassword.length >= 8;
-  const passwordLengthLE = inputPassword.length <= 20;
+  const passwordLengthLE = inputPassword.length <= 32;
   const hasLowercase = /[a-z]/.test(inputPassword);
   const hasUppercase = /[A-Z]/.test(inputPassword);
   const hasNumber = /\d/.test(inputPassword);
