@@ -30,6 +30,7 @@ export default function MyScans({ navigation }) {
         setScans(parsedScans);
       } catch (error) {
         console.error('Error fetching scans:', error);
+        Alert.alert('Error', `Error fetching scans.\n${error}`, [{ text: 'OK' }]);
       }
     };
 

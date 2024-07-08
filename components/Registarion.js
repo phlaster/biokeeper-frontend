@@ -44,7 +44,7 @@ export default function Registration({ navigation }) {
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred during registration.');
+      Alert.alert('Error', `An error occurred during registration.\n${error}`);
     } finally {
       setLoading(false);
     }

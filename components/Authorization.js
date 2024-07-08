@@ -26,6 +26,7 @@ export default function Authorization({ navigation }) {
       }
     } catch (error) {
       console.error('Error checking auth:', error);
+      Alert.alert('Error', `Error checking auth\n${error}`, [{ text: 'OK' }]);
     }
   };
 
@@ -38,14 +39,14 @@ export default function Authorization({ navigation }) {
         password: inputPassword,
       });
       if (authStatus === 401) {
-        Alert.alert('Error', 'Incorrect login or password!');
+        Alert.alert('Error', 'Incorrect login or password!', [{ text: 'OK' }]);
       } else {
         await storeData("login", inputLogin);
         navigation.navigate('LK');
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred during Authorization.');
+      Alert.alert('Error', `An error occurred during Authorization.\n${error}`, [{ text: 'OK' }]);
     } finally {
       setLoading(false);
     }

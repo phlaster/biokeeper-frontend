@@ -41,8 +41,9 @@ export default function LK({ navigation }) {
     try {
       await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'login']);
       navigation.replace('Authorization');
-    } catch (e) {
-      console.error("Error removing data", e);
+    } catch (error) {
+      console.error("Error removing data upon logout", error);
+      Alert.alert('Error', `Error removing data upon logout.\n${error}`, [{ text: 'OK' }]);
     }
   };
 
