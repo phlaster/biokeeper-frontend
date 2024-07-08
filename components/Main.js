@@ -16,10 +16,10 @@ export default function Main({ navigation }) {
       <Surface style={styles.mainSurface}>
         <Image
           style={styles.logo}
-          source={require('../assets/Biokepper.png')}
+          source={require('../assets/Biokeeper.png')}
           resizeMode="contain"
         />
-        <Text style={styles.mainTitle}>Biokepper</Text>
+        <Text style={styles.mainTitle}>Biokeeper</Text>
         <Text style={styles.mainText}>
           Здравствуйте, это приложение для сбора метаданных биологических образцов, проект студентов политеха
         </Text>
