@@ -255,4 +255,36 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+
+  scanDataSurface: {
+    padding: 16,
+    borderRadius: 10,
+    elevation: 4,
+    marginBottom: 20,
+    width: '100%',
+  },
+  dataRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  dataLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  dataValue: {
+    fontSize: 16,
+    flex: 1,
+    marginLeft: 8,
+  },
+  addInfoButton: {
+    margin: 0,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
 });
