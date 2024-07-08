@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { DefaultTheme } from 'react-native-paper';
+import { Dimensions } from 'react-native';
 
 
 const theme = {
@@ -196,5 +197,26 @@ export default StyleSheet.create({
       },
       logoutButtonLabel: {
         color: '#ffffff',
+      },
+
+
+      cameraSurface: {
+        width: '100%',
+        height: Dimensions.get('window').height * 0.7,
+        overflow: 'hidden',
+        borderRadius: 8,
+        marginBottom: 16,
+      },
+      camera: {
+        flex: 1,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+      },
+      button: {
+        flex: 1,
+        marginHorizontal: 4,
       },
 });

@@ -1,86 +1,34 @@
-import { useState, useEffect } from "react";
-import { Dimensions, Alert, Vibration,Button, Pressable,Text } from "react-native";
-import { Camera,CameraView } from 'expo-camera';
-import { router } from "expo-router";
-import * as Linking from "expo-linking";
-
-
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { Camera } from 'expo-camera';
+import { Button } from 'react-native-paper';
+import styles from '../styles/style';
 
 function QRScanner({ navigation }) {
-
-  const [hasCameraPermission, setCameraPermission] = useState<boolean | null>(
-    null
-  );
-  const [hasAudioPermission, setAudioPermission] = useState<boolean | null>(
-    null
-  );
+  const [hasPermission, setHasPermission] = useState(null);
 
   useEffect(() => {
-    const requestPermissions = async () => {
-      const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      const audioPermission = await Camera.requestMicrophonePermissionsAsync();
-
-      setCameraPermission(cameraPermission.status === "granted");
-      setAudioPermission(audioPermission.status === "granted");
-    };
-
-    requestPermissions();
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
   }, []);
 
-  useEffect(() => {
-    if (hasCameraPermission !== null && hasAudioPermission !== null) {
-      // Check permissions and execute logic when both permissions are set
-      if (!hasCameraPermission || !hasAudioPermission) {
-        Alert.alert(
-          "Camera Permissions Required",
-          "You must grant access to your camera to scan QR codes",
-          [
-            { text: "Go to settings", onPress: goToSettings },
-            {
-              text: "Cancel",
-              onPress: () => {
-                router.dismissAll();
-              },
-              style: "cancel",
-            },
-          ]
-        );
-      }
-    }
-  }, [hasCameraPermission, hasAudioPermission]);
-
-  const handleBarCodeScanned = async ({ data }) => {
-    Vibration.vibrate();
-    navigation.navigate('After_Scan', { data: data });
-  };
-  const handleBarCodeScannedTest = async () => {
-    
-    navigation.navigate('After_Scan', { data: '123'});
-  };
-
-  const goToSettings = () => {
-    Linking.openSettings();
-  };
-
-  
-  
-
-  if (hasCameraPermission && hasAudioPermission) {
-
-
-    return (
-      <><Pressable  onPress={handleBarCodeScannedTest} >
-       <Text>Start!</Text>
-       </Pressable>
-      <CameraView
-        onBarcodeScanned={handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
-        }}
-
-        style={{ height: Dimensions.get("window").height }} /></>
-    );
+  if (hasPermission === null) {
+    return <View><Text>Requesting camera permission</Text></View>;
   }
+  if (hasPermission === false) {
+    return <View><Text>No access to camera</Text></View>;
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text>QR Scanner</Text>
+      <Button mode="contained" onPress={() => navigation.goBack()}>
+        Go Back
+      </Button>
+    </View>
+  );
 }
 
 export default QRScanner;
