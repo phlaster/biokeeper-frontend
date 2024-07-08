@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 
 
 import getData from './getData';
-import auth from './Authfunc';
+import { reg, auth } from './Authfunc';
 
 
 export default function Registration({ navigation }) {
@@ -16,15 +16,27 @@ export default function Registration({ navigation }) {
 
   const loadScene = async () => {
     try {
-      await auth('create', {
+      await reg({
         username: inputLogin,
         email: inputEmail,
         password: inputPassword,
         password2: inputPassword2
       });
 
-      console.log(await getData("access_token"));
-      console.log(await getData("refresh_token"));
+      if (await getData("authStatus") == "400") {
+        alert("Пользователь с таким Email уже зарегистрирован!");
+      } else {
+        await auth({
+          grant_type: 'password',
+          username: inputLogin,
+          password: inputPassword
+        });
+        await storeData("login", inputLogin);
+        console.log(await getData("access_token"));
+        console.log(await getData("refresh_token"));
+
+        navigation.navigate('LK');
+      }
     } catch (error) {
       console.error('Error:', error);
     }

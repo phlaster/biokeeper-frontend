@@ -1,7 +1,7 @@
 import React from "react";
 import Qr_screen from  './components/Qr_screen';
 import Main from  './components/Main';
-import Bio_info from  './components/Bio_info';
+import After_Scan from  './components/After_Scan';
 import Take_photo from './components/Take_photo';
 import Autorization from './components/Autorization';
 import ResearchComment from './components/ResearchComment';
@@ -10,7 +10,7 @@ import Registration from "./components/Registarion";
 import LK from './components/LK';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-
+import MyScans from "./components/MyScans";
 
 const Stack=createStackNavigator();
 export default function Navigate(){
@@ -42,9 +42,9 @@ export default function Navigate(){
                 options={{title:'Qr_screen'}}
                 />
             <Stack.Screen
-                name="Bio_info"
-                component={Bio_info}
-                options={{title:'Bio_info'}}
+                name="After_Scan"
+                component={After_Scan}
+                options={{title:'After_Scan'}}
                 />
             <Stack.Screen
                 name="Take_photo"
@@ -60,6 +60,11 @@ export default function Navigate(){
                 name="Registration"
                 component={Registration}
                 options={{title:'Registration'}}
+                />
+                <Stack.Screen
+                name="MyScans"
+                component={MyScans}
+                options={{title:'MyScans'}}
                 />
         
         </Stack.Navigator>

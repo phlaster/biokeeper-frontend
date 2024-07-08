@@ -3,51 +3,58 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 
 import getData from './getData';
-import auth from './Authfunc';
-
+import { auth } from './Authfunc';
+import storeData from './storeData';
 
 export default function Authorization({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
   const [inputPassword, setInputPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (await getData('access_token')) {
-        navigation.navigate('LK');
+    const checkAuth = async () => {
+      try {
+        const token = await getData('access_token');
+        if (token) {
+          navigation.navigate('LK');
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error);
       }
     };
 
-    fetchData();
+    checkAuth();
   }, []);
 
-
-
   const loadScene = async () => {
+    setLoading(true);
     try {
-      await auth('token', {
+      
+
+      const authStatus = await auth({
         grant_type: 'password',
         username: inputLogin,
         password: inputPassword
       });
-
-      console.log(await getData("authStatus") == "401");
-      if (await getData("authStatus") == "401") {
-        alert("Неправильный логин или пароль!");
+      if (authStatus === 401) {
+        Alert.alert('Error', 'Неправильный логин или пароль!');
       } else {
+        await storeData("login", inputLogin);
         console.log(await getData("access_token"));
         console.log(await getData("refresh_token"));
         navigation.navigate('LK');
       }
-      
     } catch (error) {
       console.error('Error:', error);
+      Alert.alert('Error', 'An error occurred during authentication.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const registration = async () => {
-    navigation.navigate('Registration')
+  const registration = () => {
+    navigation.navigate('Registration');
   };
-
 
   return (
     <View style={styles.container}>
@@ -63,9 +70,9 @@ export default function Authorization({ navigation }) {
         onChangeText={setInputPassword}
         value={inputPassword}
         placeholder="Password"
-        secureTextEntry={true}  // Скрытие пароля
+        secureTextEntry={true}
       />
-      <Button style={styles.btn} title={'Продолжить'} onPress={loadScene} />
+      <Button style={styles.btn} title={loading ? 'Loading...' : 'Продолжить'} onPress={loadScene} disabled={loading} />
       <Button style={styles.btn} title={'у меня нет аккаунта'} onPress={registration} />
       <StatusBar style="auto" />
     </View>
@@ -78,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    },
+  },
   textLast: {
     color: 'green',
     marginTop: 50,
