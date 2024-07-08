@@ -14,7 +14,7 @@ export default function MyScans({ navigation }) {
   useEffect(() => {
     const fetchScans = async () => {
       try {
-        const username = await getData('login'); // Retrieve username from local storage
+        const username = await getData('current_user');
         const keys = await AsyncStorage.getAllKeys();
         const scanKeys = keys.filter(key => key.startsWith(`scan_${username}_`));
         const scanData = await AsyncStorage.multiGet(scanKeys);
@@ -24,7 +24,7 @@ export default function MyScans({ navigation }) {
             id: scan.id,
             time: new Date(parseInt(scan.id)).toLocaleString(),
             comment: scan.comment ? scan.comment.slice(0, 15) + (scan.comment.length > 15 ? '...' : '') : '',
-            sendStatus: 'Not Sent', // Placeholder for future implementation
+            sendStatus: 'Not Sent',
           };
         });
         setScans(parsedScans);

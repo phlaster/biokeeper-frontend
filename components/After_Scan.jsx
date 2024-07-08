@@ -47,7 +47,7 @@ export default function After_Scan({ route, navigation }) {
       latitude: location ? location.latitude : null,
       longitude: location ? location.longitude : null,
     };
-    const username = await getData('login'); // Retrieve username from local storage
+    const username = await getData('current_user');
     await storeData(`scan_${username}_${scanId}`, JSON.stringify(scanData));
     Alert.alert('Данные сохранены');
     navigation.navigate('LK');
