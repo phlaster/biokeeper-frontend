@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView, BackHandler } from 'react-native';
 import { Text, Button, Surface, Avatar, useTheme } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 
@@ -23,17 +23,15 @@ export default function LK({ navigation }) {
     }, [navigation])
   );
 
-  // React.useEffect(
-  //   () =>
-  //     navigation.addListener("beforeRemove", (event) => {
-  //       event.preventDefault();
-  //     }),
-  //   [navigation]
-  // );
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+      const backHandler = BackHandler.addEventListener("hardwareBackPress", () => true);
+      return () => backHandler.remove();
+    }, []);
 
   const fetchData = async () => {
     const access_token = await getData('access_token');
