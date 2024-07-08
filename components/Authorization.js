@@ -41,6 +41,10 @@ export default function Authorization({ navigation }) {
         Alert.alert('Error', 'Incorrect login or password!', [{ text: 'OK' }]);
       } else {
         await storeData("login", inputLogin);
+        
+        await storeData("current_user", inputLogin);
+        await storeData("current_password", inputPassword);
+        await storeData("last_login", new Date().toISOString());
         navigation.navigate('LK');
       }
     } catch (error) {

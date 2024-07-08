@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Alert } from 'react-native';
-import { TextInput, Button, Text, Surface, IconButton } from 'react-native-paper';
+import { TextInput, Button, Text, Surface } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../styles/style';
 import getData from './getData';
@@ -36,7 +36,11 @@ export default function Registration({ navigation }) {
           username: inputLogin,
           password: inputPassword
         });
-        await storeData("login", inputLogin);
+
+        await storeData("current_user", inputLogin);
+        await storeData("current_password", inputPassword);
+        await storeData("last_login", new Date().toISOString());
+
         navigation.navigate('LK');
       }
     } catch (error) {
