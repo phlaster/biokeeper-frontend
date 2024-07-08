@@ -1,63 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text ,Image} from 'react-native';
+import { View } from 'react-native';
+import { Text } from 'react-native-paper';
 import * as Location from 'expo-location';
+import { Camera } from 'expo-camera/legacy';
+import { theme, Provider as PaperProvider } from 'react-native-paper';
 import MainStack from './navigate';
-import { Camera} from 'expo-camera/legacy'; // Импортируем CameraType
+import styles from './styles/style';
 
 const App = () => {
-
   const [hasCameraPermission, setCameraPermission] = useState(false);
-  const [permissionGranted, setPermissionGranted] = useState(false);
-
-  useEffect(() => {
-    const getLocationPermission = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
-        setPermissionGranted(false);
-      } else {
-        setPermissionGranted(true);
-      }
-    };
-
-    getLocationPermission();
-  }, []); // Run only once on component mount
-
+  const [hasLocationPermission, setLocationPermission] = useState(false);
 
   useEffect(() => {
     const requestPermissions = async () => {
-      const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+      const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
 
-      setCameraPermission(cameraPermission.status === "granted");
+      setLocationPermission(locationStatus === 'granted');
+      setCameraPermission(cameraStatus === 'granted');
     };
 
     requestPermissions();
   }, []);
 
-  
-
-  if (!permissionGranted && !hasCameraPermission) {
+  if (!hasLocationPermission || !hasCameraPermission) {
     return (
-      <View style={styles.container}>
-        <Text>Permission to access location was denied</Text>
-      </View>
+      <PaperProvider>
+        <View style={styles.container}>
+          <Text style={styles.errorText}>
+            {!hasLocationPermission && "Location permission denied. "}
+            {!hasCameraPermission && "Camera permission denied."}
+          </Text>
+        </View>
+      </PaperProvider>
     );
   }
 
-  return <MainStack />;
+  return (
+    <PaperProvider>
+      <MainStack />
+    </PaperProvider>
+  );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 350,
-    height: 240,
-  },
-});
 
 export default App;

@@ -1,50 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Alert } from 'react-native';
 import { TextInput, Button, Text, Surface } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-
+import { useTheme } from 'react-native-paper';
 import styles from '../styles/style';
 import getData from './getData';
-import { reg, auth } from './Authfunc';
+import { auth } from './Authfunc';
 import storeData from './storeData';
 
-export default function Registration({ navigation }) {
+export default function Authorization({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
-  const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
-  const [inputPassword2, setInputPassword2] = useState('');
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
 
-  const handleRegistration = async () => {
-    if (inputPassword !== inputPassword2) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const token = await getData('access_token');
+      if (token) {
+        navigation.navigate('LK');
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
     }
+  };
 
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      await reg({
+      const authStatus = await auth({
+        grant_type: 'password',
         username: inputLogin,
-        email: inputEmail,
         password: inputPassword,
-        password2: inputPassword2
       });
-
-      const authStatus = await getData("authStatus");
-      if (authStatus === "400") {
-        Alert.alert("Error", "A user with this email is already registered!");
+      if (authStatus === 401) {
+        Alert.alert('Error', 'Incorrect login or password!');
       } else {
-        await auth({
-          grant_type: 'password',
-          username: inputLogin,
-          password: inputPassword
-        });
         await storeData("login", inputLogin);
         navigation.navigate('LK');
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred during registration.');
+      Alert.alert('Error', 'An error occurred during Authorization.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +55,7 @@ export default function Registration({ navigation }) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Surface style={styles.authSurface}>
-        <Text style={styles.title}>Registration</Text>
+        <Text style={styles.title}>Welcome Back</Text>
         <TextInput
           style={styles.input}
           label="Login"
@@ -64,43 +65,27 @@ export default function Registration({ navigation }) {
         />
         <TextInput
           style={styles.input}
-          label="Email"
-          mode="outlined"
-          value={inputEmail}
-          onChangeText={setInputEmail}
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
           label="Password"
           mode="outlined"
           value={inputPassword}
           onChangeText={setInputPassword}
           secureTextEntry
         />
-        <TextInput
-          style={styles.input}
-          label="Repeat Password"
-          mode="outlined"
-          value={inputPassword2}
-          onChangeText={setInputPassword2}
-          secureTextEntry
-        />
         <Button
           mode="contained"
           style={styles.button}
-          onPress={handleRegistration}
           loading={loading}
+          onPress={handleLogin}
           disabled={loading}
         >
-          {loading ? 'Registering...' : 'Register'}
+          {loading ? 'Logging in...' : 'Log in'}
         </Button>
         <Button
           mode="text"
-          onPress={() => navigation.navigate('Authorization')}
+          onPress={() => navigation.navigate('Registration')}
           style={styles.textButton}
         >
-          Already have an account? Log in
+          Don't have an account? Sign up
         </Button>
       </Surface>
     </View>

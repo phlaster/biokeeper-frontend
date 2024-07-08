@@ -1,146 +1,108 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Alert, Image } from 'react-native';
-import getData from './getData';
-import storeData from './storeData';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LK({ navigation }) {
-  const [userData, setUserData] = useState({ name: '', email: '' });
-  const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Image, ScrollView } from 'react-native';
+import { Text, Button, Surface, Avatar, useTheme } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
 
-  const exit = async () => {
-    try {
-      await AsyncStorage.removeItem('access_token');
-      await AsyncStorage.removeItem('refresh_token');
-      await AsyncStorage.removeItem('username'); // Remove username from local storage
-      navigation.navigate('Autorization');
-    } catch (e) {
-      console.error("Ошибка при удалении данных", e);
-    }
-  };
+import styles from '../styles/style';
+import getData from './getData';
+
+export default function LK({ navigation }) {
+  const [userData, setUserData] = useState({ name: '', email: 'some@email.com' });
+  const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
+  const theme = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({
+        headerLeft: null,
+        gestureEnabled: false,
+      });
+    }, [navigation])
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const access_token = await getData('access_token');
-      const username = await getData('login'); // Retrieve username from local storage
-      if (!access_token) {
-        Alert.alert("Invalid Login or Password");
-      } else {
-        setUserData({ ...userData, name: username }); // Set username in state
-      }
-    };
-
     fetchData();
   }, []);
 
-  const Scan = () => {
-    navigation.navigate('Qr_screen');
+  const fetchData = async () => {
+    const access_token = await getData('access_token');
+    const username = await getData('login');
+    if (!access_token) {
+      navigation.replace('Authorization');
+    } else {
+      setUserData({ ...userData, name: username });
+    }
   };
-  const MyScan = () => {
-    navigation.navigate('MyScans');
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'login']);
+      navigation.replace('Authorization');
+    } catch (e) {
+      console.error("Error removing data", e);
+    }
+  };
+
+  const navigateTo = (screen) => {
+    navigation.navigate(screen);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Image style={styles.userpic} source={require('../assets/LK.png')} />
-        <View style={styles.userInfo}>
-          <Text>{userData.name}</Text>
-          <Text>{userData.email}</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+      <View style={styles.statusBar}>
+        <Avatar.Image size={80} source={require('../assets/LK.png')} />
+        <View style={styles.statusBarUserInfo}>
+          <Text style={styles.statusBarUsername}>{userData.name}</Text>
+          <Text style={styles.statusBarEmail}>{userData.email}</Text>
         </View>
-        <Button title="Log Out" onPress={exit} />
+        <Button mode="outlined" onPress={handleLogout}>
+          Log Out
+        </Button>
       </View>
 
-      <View style={styles.buttonSection}>
-        <View style={styles.buttonRow}>
-          <View style={styles.buttonContainer}>
-            <Button title="Scan" onPress={Scan} />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button title="My Scans" onPress={MyScan} />
-          </View>
-        </View>
-        <View style={styles.buttonRow}>
-          <View style={styles.buttonContainer}>
-            <Button title="Activate KIT" onPress={() => {}} />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button title="My Kits" onPress={() => {}} />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.infoBox}>
-        <View style={styles.infoRow}>
-          <Text>Total scans:</Text>
-          <Text>{stats.totalScans}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text>Researches:</Text>
-          <Text>{stats.researches}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text>Kits:</Text>
-          <Text>{stats.kits}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text>QRs:</Text>
-          <Text>{stats.qrs}</Text>
-        </View>
-      </View>
-
-      <StatusBar style="auto" />
+      {/* Rest of your component */}
     </View>
+
+      <View style={styles.buttonGrid}>
+        <Button mode="contained" onPress={() => navigateTo('Qr_screen')} style={styles.gridButton}>
+          Scan
+        </Button>
+        <Button mode="contained" onPress={() => navigateTo('MyScans')} style={styles.gridButton}>
+          My Scans
+        </Button>
+        <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+          Activate KIT
+        </Button>
+        <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+          My Kits
+        </Button>
+      </View>
+
+      <Surface style={styles.statsSurface}>
+        <Text style={styles.statsTitle}>Statistics</Text>
+        <View style={styles.statsGrid}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{stats.totalScans}</Text>
+            <Text style={styles.statLabel}>Total scans</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{stats.researches}</Text>
+            <Text style={styles.statLabel}>Researches</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{stats.kits}</Text>
+            <Text style={styles.statLabel}>Kits</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{stats.qrs}</Text>
+            <Text style={styles.statLabel}>QRs</Text>
+          </View>
+        </View>
+      </Surface>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  topSection: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: 20,
-  },
-  userpic: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  userInfo: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  buttonSection: {
-    flex: 2,
-    width: '100%',
-    padding: 20,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 40,
-  },
-  buttonContainer: {
-    flex: 1,
-    marginHorizontal: 10,
-  },
-  infoBox: {
-    flex: 1,
-    width: '100%',
-    padding: 20,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-});

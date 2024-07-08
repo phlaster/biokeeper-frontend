@@ -15,7 +15,7 @@ npm start
 filename   | description of file
 ----------------------|----------------------
 Main.js            | welcome window
-Autorization.js     | Autorization
+Authorization.js     | Authorization
 LK.js               |personal account, list of research
 ResearchComment.jsx    | information about the research
 QR_screen.tsx          | window for scanning the QR code of the research
