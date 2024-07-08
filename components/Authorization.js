@@ -41,15 +41,32 @@ export default function Authorization({ navigation }) {
         Alert.alert('Error', 'Incorrect login or password!', [{ text: 'OK' }]);
       } else {
         await storeData("login", inputLogin);
-        
         await storeData("current_user", inputLogin);
         await storeData("current_password", inputPassword);
         await storeData("last_login", new Date().toISOString());
         navigation.navigate('LK');
       }
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', `An error occurred during Authorization.\n${error}`, [{ text: 'OK' }]);
+      if (error.response && error.response.status === 401) {
+        Alert.alert('Error', 'Incorrect login or password!', [{ text: 'OK' }]);
+      } else {
+        console.error('Network error:', error);
+        try {
+          const storedUser = await getData('current_user');
+          const storedPassword = await getData('current_password');
+          if (storedUser === inputLogin && storedPassword === inputPassword) {
+            await storeData("offline_mode", '1');
+            Alert.alert('Going offline', 'Network is unavailable, but you can continue offline.', [
+              { text: 'OK', onPress: () => navigation.navigate('LK') }
+            ]);
+          } else {
+            Alert.alert('Offline login failed', 'Network is unavailable, offline login failed.', [{ text: 'OK' }]);
+          }
+        } catch (storageError) {
+          console.error('Storage error:', storageError);
+          Alert.alert('Error', 'An error occurred while checking offline login.', [{ text: 'OK' }]);
+        }
+      }
     } finally {
       setLoading(false);
     }

@@ -47,7 +47,6 @@ export default StyleSheet.create({
     textButton: {
         marginTop: 16,
     },
-
     mainSurface: {
         padding: 24,
         borderRadius: 8,
@@ -154,12 +153,12 @@ export default StyleSheet.create({
         color: theme.colors.text,
       },
       statusBar: {
-        height: '30%',
+        height: '20%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: 'white',
-        paddingHorizontal: 16,
+        paddingHorizontal: 10,
         paddingTop: 16,
         paddingBottom: 16,
       },
@@ -174,5 +173,28 @@ export default StyleSheet.create({
       statusBarEmail: {
         fontSize: 14,
         color: theme.colors.placeholder,
+      },
+      statusBarLogoutButton: {
+        // margin: -10,
+        // padding: -5,
+        borderRadius: 15,
+        backgroundColor: '#9f0e0e',
+      },
+      statusBarLogoutButtonLabel: {
+        fontSize: 16,
+        color: '#ffffff',
+        marginHorizontal: 8
+      },
+      connectButton: {
+        backgroundColor: '#808080',
+      },
+      connectButtonLabel: {
+        color: '#000000',
+      },
+      logoutButton: {
+        backgroundColor: '#9f0e0e',
+      },
+      logoutButtonLabel: {
+        color: '#ffffff',
       },
 });

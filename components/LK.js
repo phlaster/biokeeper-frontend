@@ -2,16 +2,18 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Image, ScrollView, BackHandler } from 'react-native';
+import { View, Image, ScrollView, BackHandler, Alert } from 'react-native';
 import { Text, Button, Surface, Avatar, useTheme } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 
 import styles from '../styles/style';
 import getData from './getData';
+import { auth } from './Authfunc';
 
 export default function LK({ navigation }) {
   const [userData, setUserData] = useState({ name: '', email: 'some@email.com' });
   const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
+  const [isOffline, setIsOffline] = useState(false);
   const theme = useTheme();
 
   useFocusEffect(
@@ -23,33 +25,58 @@ export default function LK({ navigation }) {
     }, [navigation])
   );
 
-
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-      const backHandler = BackHandler.addEventListener("hardwareBackPress", () => true);
-      return () => backHandler.remove();
-    }, []);
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => true);
+    return () => backHandler.remove();
+  }, []);
 
   const fetchData = async () => {
-    const access_token = await getData('access_token');
-    const username = await getData('login');
-    if (!access_token) {
-      navigation.replace('Authorization');
+    const offlineMode = await getData('offline_mode');
+    const username = await getData('current_user');
+    setUserData({ ...userData, name: username });
+    if (offlineMode === '1') {
+      setIsOffline(true);
     } else {
-      setUserData({ ...userData, name: username });
+      const access_token = await getData('access_token');
+      if (!access_token) {
+        navigation.replace('Authorization');
+      }
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'login']);
-      navigation.replace('Authorization');
-    } catch (error) {
-      console.error("Error removing data upon logout", error);
-      Alert.alert('Error', `Error removing data upon logout.\n${error}`, [{ text: 'OK' }]);
+    if (isOffline) {
+      try {
+        const username = await getData('current_user');
+        const password = await getData('current_password');
+        const authStatus = await auth({
+          grant_type: 'password',
+          username: username,
+          password: password,
+        });
+        if (authStatus === 401) {
+          await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'offline_mode']);
+          navigation.replace('Authorization');
+        } else {
+          await AsyncStorage.setItem('offline_mode', '0');
+          setIsOffline(false);
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+        Alert.alert('Couldn\'t connect to server', 'Please check your internet connection and try again.', [{ text: 'OK' }]);
+      }
+    } else {
+      try {
+        await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'offline_mode']);
+        navigation.replace('Authorization');
+      } catch (error) {
+        console.error("Error removing data upon logout", error);
+        Alert.alert('Error', `Error removing data upon logout.\n${error}`, [{ text: 'OK' }]);
+      }
     }
   };
 
@@ -57,6 +84,14 @@ export default function LK({ navigation }) {
     navigation.navigate(screen);
   };
 
+  const getButtonStyles = (label) => {
+    return {
+      containerStyle: label === 'Connect' ? styles.connectButton : styles.logoutButton,
+      labelStyle: label === 'Connect' ? styles.connectButtonLabel : styles.logoutButtonLabel,
+    };
+  };
+
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -66,8 +101,13 @@ export default function LK({ navigation }) {
             <Text style={styles.statusBarUsername}>{userData.name}</Text>
             <Text style={styles.statusBarEmail}>{userData.email}</Text>
           </View>
-          <Button mode="outlined" onPress={handleLogout}>
-            Log Out
+          <Button
+            style={[styles.statusBarLogoutButton, getButtonStyles(isOffline ? 'Connect' : 'Log Out').containerStyle]}
+            labelStyle={[styles.statusBarLogoutButtonLabel, getButtonStyles(isOffline ? 'Connect' : 'Log Out').labelStyle]}
+            mode="outlined"
+            onPress={handleLogout}
+          >
+            {isOffline ? 'Connect' : 'Log Out'}
           </Button>
         </View>
 
