@@ -54,56 +54,55 @@ export default function LK({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <Avatar.Image size={80} source={require('../assets/LK.png')} />
-        <View style={styles.statusBarUserInfo}>
-          <Text style={styles.statusBarUsername}>{userData.name}</Text>
-          <Text style={styles.statusBarEmail}>{userData.email}</Text>
+        <View style={styles.statusBar}>
+          <Avatar.Image size={80} source={require('../assets/LK.png')} />
+          <View style={styles.statusBarUserInfo}>
+            <Text style={styles.statusBarUsername}>{userData.name}</Text>
+            <Text style={styles.statusBarEmail}>{userData.email}</Text>
+          </View>
+          <Button mode="outlined" onPress={handleLogout}>
+            Log Out
+          </Button>
         </View>
-        <Button mode="outlined" onPress={handleLogout}>
-          Log Out
-        </Button>
-      </View>
 
-      {/* Rest of your component */}
-    </View>
 
-      <View style={styles.buttonGrid}>
-        <Button mode="contained" onPress={() => navigateTo('Qr_screen')} style={styles.gridButton}>
-          Scan
-        </Button>
-        <Button mode="contained" onPress={() => navigateTo('MyScans')} style={styles.gridButton}>
-          My Scans
-        </Button>
-        <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
-          Activate KIT
-        </Button>
-        <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
-          My Kits
-        </Button>
-      </View>
-
-      <Surface style={styles.statsSurface}>
-        <Text style={styles.statsTitle}>Statistics</Text>
-        <View style={styles.statsGrid}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.totalScans}</Text>
-            <Text style={styles.statLabel}>Total scans</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.researches}</Text>
-            <Text style={styles.statLabel}>Researches</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.kits}</Text>
-            <Text style={styles.statLabel}>Kits</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.qrs}</Text>
-            <Text style={styles.statLabel}>QRs</Text>
-          </View>
+        <View style={styles.buttonGrid}>
+          <Button mode="contained" onPress={() => navigateTo('Qr_screen')} style={styles.gridButton}>
+            Scan
+          </Button>
+          <Button mode="contained" onPress={() => navigateTo('MyScans')} style={styles.gridButton}>
+            My Scans
+          </Button>
+          <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+            Activate KIT
+          </Button>
+          <Button mode="contained" onPress={() => {}} style={styles.gridButton}>
+            My Kits
+          </Button>
         </View>
-      </Surface>
+
+        <Surface style={styles.statsSurface}>
+          <Text style={styles.statsTitle}>Statistics</Text>
+          <View style={styles.statsGrid}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats.totalScans}</Text>
+              <Text style={styles.statLabel}>Total scans</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats.researches}</Text>
+              <Text style={styles.statLabel}>Researches</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats.kits}</Text>
+              <Text style={styles.statLabel}>Kits</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats.qrs}</Text>
+              <Text style={styles.statLabel}>QRs</Text>
+            </View>
+          </View>
+        </Surface>
+      </View>
     </ScrollView>
   );
 }
