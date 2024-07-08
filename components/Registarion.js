@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { TextInput, Button, Text, Surface } from 'react-native-paper';
+import { View, Alert } from 'react-native';
+import { TextInput, Button, Text, Surface, IconButton } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import styles from '../styles/style';
 import getData from './getData';
@@ -15,6 +15,7 @@ export default function Registration({ navigation }) {
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegistration = async () => {
     setLoading(true);
@@ -58,9 +59,9 @@ export default function Registration({ navigation }) {
 
   let passwordWeaknessMessage = '';
   if (!passwordLengthGE) {
-    passwordWeaknessMessage = 'Password is too short';
+    passwordWeaknessMessage = 'Too short for a password';
   } else if (!passwordLengthLE) {
-    passwordWeaknessMessage = 'Password is too long';
+    passwordWeaknessMessage = 'Not too long!';
   } else if (!hasLowercase) {
     passwordWeaknessMessage = 'Need lowercase letters';
   } else if (!hasUppercase) {
@@ -71,12 +72,12 @@ export default function Registration({ navigation }) {
     passwordWeaknessMessage = 'Need a special character';
   }
 
-  let buttonLabel = 'Enter your credentials';
+  let buttonLabel = 'Set your new login';
   if (inputLogin) {
     if (!inputEmail) {
       buttonLabel = 'Enter your email';
     } else if (!emailIsValid) {
-      buttonLabel = 'Enter valid email';
+      buttonLabel = 'Enter a valid email, please!';
     } else if (!inputPassword) {
       buttonLabel = 'Enter your password';
     } else if (passwordWeaknessMessage) {
@@ -84,7 +85,7 @@ export default function Registration({ navigation }) {
     } else if (!passwordsMatch) {
       buttonLabel = 'Passwords don\'t match';
     } else {
-      buttonLabel = 'Register';
+      buttonLabel = 'Sign up!';
     }
   }
 
@@ -116,7 +117,8 @@ export default function Registration({ navigation }) {
           mode="outlined"
           value={inputPassword}
           onChangeText={setInputPassword}
-          secureTextEntry
+          secureTextEntry={!showPassword}
+          right={<TextInput.Icon icon={showPassword ? "eye-off" : "eye"} onPress={() => setShowPassword(!showPassword)} />}
         />
         <TextInput
           style={styles.input}
@@ -124,7 +126,8 @@ export default function Registration({ navigation }) {
           mode="outlined"
           value={inputPassword2}
           onChangeText={setInputPassword2}
-          secureTextEntry
+          secureTextEntry={!showPassword}
+          right={<TextInput.Icon />}
           editable={!passwordWeaknessMessage}
         />
         <Button

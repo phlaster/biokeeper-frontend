@@ -11,6 +11,7 @@ export default function Authorization({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -68,7 +69,8 @@ export default function Authorization({ navigation }) {
           mode="outlined"
           value={inputPassword}
           onChangeText={setInputPassword}
-          secureTextEntry
+          secureTextEntry={!showPassword}
+          right={<TextInput.Icon icon={showPassword ? "eye-off" : "eye"} onPress={() => setShowPassword(!showPassword)} />}
         />
         <Button
           mode="contained"
