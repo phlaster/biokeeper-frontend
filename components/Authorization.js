@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Alert } from 'react-native';
 import { TextInput, Button, Text, Surface } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-import { useTheme } from 'react-native-paper';
 import styles from '../styles/style';
 import getData from './getData';
 import { auth } from './Authfunc';
@@ -12,7 +11,6 @@ export default function Authorization({ navigation }) {
   const [inputLogin, setInputLogin] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const theme = useTheme();
 
   useEffect(() => {
     checkAuth();
