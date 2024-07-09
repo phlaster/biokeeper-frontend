@@ -9,7 +9,7 @@ export async function getStats(token, refresh_tok) {
       }
     });
 
-    storeData("kits_count", kits.data.length);
+    storeData("kits_count", JSON.stringify(kits.data.length));
 
     const researches = await axios.get('http://62.109.17.249:8006/users/me/researches', {
         headers: {
@@ -17,7 +17,7 @@ export async function getStats(token, refresh_tok) {
         }
       });
   
-      storeData("researches_count", researches.data.length);
+      storeData("researches_count", JSON.stringify(researches.data.length));
 
       const scans = await axios.get('http://62.109.17.249:8006/users/me/samples', {
         headers: {
@@ -25,7 +25,7 @@ export async function getStats(token, refresh_tok) {
         }
       });
   
-      storeData("scans_count", scans.data.length);
+      storeData("scans_count", JSON.stringify(scans.data.length));
 
   } catch (error) {
     console.log(error);
