@@ -149,10 +149,6 @@ export default function LK({ navigation }) {
               <Text style={styles.statValue}>{stats.kits}</Text>
               <Text style={styles.statLabel}>Kits</Text>
             </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{stats.qrs}</Text>
-              <Text style={styles.statLabel}>QRs</Text>
-            </View>
           </View>
         </Surface>
       </View>
