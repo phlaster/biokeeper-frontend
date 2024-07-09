@@ -21,7 +21,7 @@ export default function Main({ navigation }) {
         />
         <Text style={styles.mainTitle}>Biokeeper</Text>
         <Text style={styles.mainText}>
-          Здравствуйте, это приложение для сбора метаданных биологических образцов, проект студентов политеха
+        Citizen science biosample annotation tool 
         </Text>
         <Button
           mode="contained"
