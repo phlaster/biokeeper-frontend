@@ -9,10 +9,11 @@ import { Text, Button, Surface, Avatar } from 'react-native-paper';
 import styles from '../styles/style';
 import getData from './getData';
 import { auth } from './Authfunc';
+import { getStats } from './Utils';
 
 export default function LK({ navigation }) {
   const [userData, setUserData] = useState({ name: '', email: 'some@email.com' });
-  const [stats, setStats] = useState({ totalScans: 10, researches: 5, kits: 3, qrs: 20 });
+  const [stats, setStats] = useState({ totalScans: 0, researches: 0, kits: 0 });
   const [isOffline, setIsOffline] = useState(false);
 
   useFocusEffect(
@@ -36,7 +37,15 @@ export default function LK({ navigation }) {
   const fetchData = async () => {
     const offlineMode = await getData('offline_mode');
     const username = await getData('current_user');
+
+    await getStats(await getData('access_token'), await getData('refrash_token'));
+
+    const scansCount = await getData('scans_count');
+    const researchesCount = await getData('researches_count');
+    const kitsCount = await getData('kits_count');
+
     setUserData({ ...userData, name: username });
+    setStats({ totalScans: scansCount, researches: researchesCount, kits: kitsCount });
     if (offlineMode === '1') {
       setIsOffline(true);
     } else {
@@ -139,10 +148,6 @@ export default function LK({ navigation }) {
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{stats.kits}</Text>
               <Text style={styles.statLabel}>Kits</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{stats.qrs}</Text>
-              <Text style={styles.statLabel}>QRs</Text>
             </View>
           </View>
         </Surface>

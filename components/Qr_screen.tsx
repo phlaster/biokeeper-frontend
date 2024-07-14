@@ -18,18 +18,19 @@ function QRScanner({ navigation }) {
     })();
   }, []);
 
-  useEffect(() => {
-    if (hasPermissions === false) {
-      Alert.alert(
-        "Camera Permissions Required",
-        "You must grant access to your camera to scan QR codes",
-        [
-          { text: "Go to settings", onPress: () => Linking.openSettings() },
-          { text: "Cancel", onPress: () => router.dismissAll(), style: "cancel" },
-        ]
-      );
-    }
-  }, [hasPermissions]);
+  
+  // useEffect(() => {
+  //   if (hasPermissions === false) {
+  //     Alert.alert(
+  //       "Camera Permissions Required",
+  //       "You must grant access to your camera to scan QR codes",
+  //       [
+  //         { text: "Go to settings", onPress: () => Linking.openSettings() },
+  //         { text: "Cancel", onPress: () => router.dismissAll(), style: "cancel" },
+  //       ]
+  //     );
+  //   }
+  // }, [hasPermissions]);
 
   const handleBarCodeScanned = ({ data }) => {
     Vibration.vibrate([0, 70]);
