@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Alert } from 'react-native';
 import { TextInput, Button, Text, Surface } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-import styles from '../styles/style';
+
+import { StyleSheet } from 'react-native';
+
 import getData from './getData';
 import { auth } from './Authfunc';
 import storeData from './storeData';
@@ -113,3 +115,31 @@ export default function Authorization({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  authSurface: {
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  button: {
+    marginTop: 20,
+  },
+  textButton: {
+    marginTop: 10,
+  },
+});
